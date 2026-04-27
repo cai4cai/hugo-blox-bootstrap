@@ -1,5 +1,17 @@
 # [Wowchemy Bootstrap (Legacy)](https://github.com/HugoBlox/wowchemy-bootstrap-legacy)
 
+> [!IMPORTANT]
+> **This is a personal fork of the original project.**  
+> Upstream source: https://github.com/HugoBlox/wowchemy-bootstrap-legacy
+>
+> This fork exists only to support our own website and pinned module versions.  
+> You should **not** expect active maintenance, feature development, or general support here.
+>
+> Recommended module include for this personal fork:
+> ```go
+> require github.com/cai4cai/hugo-blox-bootstrap/modules/blox-bootstrap/v5 v5.9.9
+> ```
+
 > [!WARNING]
 > **This repository is legacy and is no longer maintained.**  
 > It exists for historical reference only (the old Bootstrap-based framework from the Wowchemy era).
