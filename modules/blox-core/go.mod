@@ -1,3 +1,3 @@
-module github.com/HugoBlox/hugo-blox-builder/modules/blox-core
+module github.com/cai4cai/hugo-blox-bootstrap/modules/blox-core
 
-go 1.15
+go 1.22
