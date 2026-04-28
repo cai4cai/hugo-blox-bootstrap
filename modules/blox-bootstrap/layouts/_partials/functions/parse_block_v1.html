@@ -11,7 +11,8 @@
 {{ if eq $block_type "pages" }}{{ $block_type = "collection" }}{{ end }}{{/* Support legacy Pages block */}}
 {{ if eq $block_type "featured" }}{{ $block_type = "collection" }}{{ end }}{{/* Support legacy Featured block */}}
 {{ $widget_path := printf "blocks/v1/%s.html" $block_type }}
-{{ if not (templates.Exists (printf "_partials/%s" $widget_path)) }}
+{{/* Hugo 0.160 may return false negatives for dotted partial names in templates.Exists. */}}
+{{ if and (not (in $block_type ".")) (not (templates.Exists (printf "_partials/%s" $widget_path))) }}
   {{ errorf "%s uses a `%s` block but the `%s` block was not found at `layouts/_partials/%s`" $block.File.Path $block_type $block_type $widget_path }}
 {{ end }}
 

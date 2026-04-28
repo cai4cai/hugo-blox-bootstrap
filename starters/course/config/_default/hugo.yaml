@@ -12,12 +12,12 @@ baseURL: 'https://example.com/' # Website URL
 
 cascade:
   # Docs folder options
-  - _target:
+  - target:
       path: /course/**
     editable: true
     show_breadcrumb: true
   # Blog post folder options
-  - _target:
+  - target:
       path: /post/**
     show_related: true
 

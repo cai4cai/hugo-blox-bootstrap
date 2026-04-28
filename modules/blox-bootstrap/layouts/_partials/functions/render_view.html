@@ -4,30 +4,32 @@
 {{ $item := .item }}
 {{ $view := .view }}
 {{ $view_file := "" }}
-{{ $view_dtype :=  printf "%T" $view }}
+{{ $view_dtype := printf "%T" $view }}
 {{ $index := .index }}
 
-{{if eq $view_dtype "int" | or (eq $view_dtype "int64") }}
-  {{/* Support legacy numeric views 1-5 */}}
-  {{ if eq $view 1 }}
+{{ if in (slice "int" "int64" "uint" "uint64") $view_dtype }}
+  {{/* Support legacy numeric views 1-5 from older front matter values. */}}
+  {{ $view_num := int $view }}
+  {{ if eq $view_num 1 }}
     {{ $view_file = "list" }}
-  {{ else if eq $view 3 }}
+  {{ else if eq $view_num 3 }}
     {{ $view_file = "card" }}
-  {{ else if eq $view 4 }}
+  {{ else if eq $view_num 4 }}
     {{ $view_file = "citation" }}
-  {{ else if eq $view 5 }}
+  {{ else if eq $view_num 5 }}
     {{ $view_file = "showcase" }}
   {{ else }}
     {{ $view_file = "compact" }}
   {{ end }}
-{{else}}
-  {{ if templates.Exists (printf "_partials/views/%s.html" (lower $view)) }}
-    {{ $view_file = lower $view }}
-  {{else}}
+{{ else }}
+  {{ $view_name := lower (string $view) }}
+  {{ if templates.Exists (printf "_partials/views/%s.html" $view_name) }}
+    {{ $view_file = $view_name }}
+  {{ else }}
     {{/* Fallback to compact view */}}
-    {{ warnf "Failed to locate view at `partials/views/%s.html`. Check you specified a supported `view` in `%s`" $view $page.File.Path }}
+    {{ warnf "Failed to locate view at `partials/views/%s.html`. Check you specified a supported `view` in `%s`" $view_name $page.File.Path }}
     {{ $view_file = "compact" }}
-  {{end}}
+  {{ end }}
 {{ end }}
 
 {{ return (partial (printf "views/%s" $view_file) (dict "page" $page "item" $item "index" $index)) }}

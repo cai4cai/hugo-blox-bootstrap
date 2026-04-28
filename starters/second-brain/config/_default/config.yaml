@@ -12,7 +12,7 @@ baseURL: 'https://example.com/' # Website URL
 
 cascade:
   # Docs folder options
-  - _target:
+  - target:
       path: /**
     type: book
     editable: true
@@ -22,7 +22,7 @@ cascade:
 ## LANGUAGE
 ############################
 
-languageCode: en-us
+locale: en-us
 hasCJKLanguage: false
 defaultContentLanguageInSubdir: false
 removePathAccents: true

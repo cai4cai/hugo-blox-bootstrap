@@ -47,7 +47,7 @@
 
       <div class="docs-article-container">
         {{/* Fallback to filename as title (useful for default Obsidian note structure) */}}
-        <h1>{{ cond (ne .File nil) (.Title | default (title .File.ContentBaseName)) .Title }}</h1>
+        <h1>{{ if .File }}{{ .Title | default (title .File.ContentBaseName) }}{{ else }}{{ .Title }}{{ end }}</h1>
 
         <article class="article-style">
 

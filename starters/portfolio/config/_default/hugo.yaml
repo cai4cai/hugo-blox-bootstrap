@@ -12,7 +12,7 @@ baseURL: 'https://example.com/' # Website URL
 
 cascade:
   # Blog post options
-  - _target:
+  - target:
       path: /post/**
     editable: true
     reading_time: true
