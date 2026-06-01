@@ -7,6 +7,35 @@
 
 // Initialize Google Maps or OpenStreetMap via Leaflet.
 function initMap() {
+  // Leaflet can fail to auto-resolve marker image paths in some bundling/CDN setups.
+  // Derive the base image path from the loaded Leaflet stylesheet and fallback to jsDelivr.
+  function getLeafletImageBase() {
+    let leafletCss = document.querySelector('link[href*="leaflet"][href$=".css"]');
+
+    if (leafletCss && leafletCss.href) {
+      try {
+        return new URL('images/', leafletCss.href).toString();
+      } catch (e) {
+        // Fall through to CDN fallback.
+      }
+    }
+
+    return 'https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/images/';
+  }
+
+  function configureLeafletMarkerIcons() {
+    if (typeof L === 'undefined' || !L.Icon || !L.Icon.Default) {
+      return;
+    }
+
+    let imageBase = getLeafletImageBase();
+    L.Icon.Default.mergeOptions({
+      iconRetinaUrl: imageBase + 'marker-icon-2x.png',
+      iconUrl: imageBase + 'marker-icon.png',
+      shadowUrl: imageBase + 'marker-shadow.png',
+    });
+  }
+
   if ($('#map').length) {
     let map_provider = $('#map-provider').val();
     let lat = $('#map-lat').val();
@@ -41,6 +70,8 @@ function initMap() {
         title: address,
       });
     } else {
+      configureLeafletMarkerIcons();
+
       let map = new L.map('map').setView([lat, lng], zoom);
       if (map_provider === 'mapbox' && api_key.length) {
         L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
