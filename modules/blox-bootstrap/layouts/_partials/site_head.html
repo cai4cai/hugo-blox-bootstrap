@@ -140,12 +140,17 @@
   {{ $license := $license | printf "%s/*! Copyright 2016-present George Cushen (https://georgecushen.com/) */\n" }}
   {{ $license := $license | printf "%s/*! License: https://github.com/HugoBlox/hugo-blox-builder/blob/main/LICENSE.md */\n" }}
   {{ $css_bundle_head := $license | resources.FromString "css/bundle-head.css" }}
-  {{ $css_options := dict "targetPath" "css/wowchemy.css" }}
+  {{/* Dart Sass deprecations come from the vendored Bootstrap 4.6 SCSS; silenced until Bootstrap is upgraded. */}}
+  {{ $css_options := dict
+    "targetPath" "css/wowchemy.css"
+    "transpiler" "dartsass"
+    "silenceDeprecations" (slice "import" "global-builtin" "color-functions" "if-function" "abs-percent")
+  }}
   {{- if hugo.IsProduction -}}
     {{- $css_options = merge $css_options (dict "outputStyle" "compressed") -}}
   {{- end -}}
   {{ $sass_template := resources.Get "scss/main.scss" }}
-  {{ $style := $sass_template | resources.ExecuteAsTemplate "main_parsed.scss" . | toCSS $css_options }}
+  {{ $style := $sass_template | resources.ExecuteAsTemplate "main_parsed.scss" . | css.Sass $css_options }}
   {{- if hugo.IsProduction -}}
     {{- $style = $style | minify -}}
   {{- end -}}
